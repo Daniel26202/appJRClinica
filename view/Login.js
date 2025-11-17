@@ -1,15 +1,16 @@
-import { StyleSheet, Text, ImageBackground, Image } from "react-native";
+import { StyleSheet, Text, View, Button, TextInput, ImageBackground, Image } from "react-native";
 import { useState } from "react";
 
-import { Card } from "./components/Card";
-import { Input } from "./components/Input";
-import { SubmitButton } from "./components/SubmitButton";
+import { Card } from "../components/Card";
+import { Input } from "../components/Input";
+import { SubmitButton } from "../components/SubmitButton";
 
 // Imágenes
-const wallpaper = require("./assets/Wallpaper.png");
-const logo = require("./assets/logo.png");
+const wallpaper = require("../assets/Wallpaper.png");
+const logo = require("../assets/logo.png");
 
-export default function App() {
+// Pantalla Login
+export const Login = ({ navigation }) => {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
 
@@ -35,7 +36,7 @@ export default function App() {
             </Card>
         </ImageBackground>
     );
-}
+};
 
 // Estilos
 const styles = StyleSheet.create({
