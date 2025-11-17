@@ -10,7 +10,7 @@ const wallpaper = require("../assets/Wallpaper.png");
 const logo = require("../assets/logo.png");
 
 // Pantalla
-export default RecuperarPassword = ({ navigation }) => {
+export function RecuperarPassword({ navigation }) {
     const [usuario, setUsuario] = useState("");
     const [correo, setCorreo] = useState("");
 
@@ -37,7 +37,7 @@ export default RecuperarPassword = ({ navigation }) => {
             </Card>
         </ImageBackground>
     );
-};
+}
 
 // Estilos
 const styles = StyleSheet.create({

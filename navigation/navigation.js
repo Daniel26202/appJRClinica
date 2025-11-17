@@ -1,13 +1,13 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/native-stack";
+import { createStackNavigator  } from "@react-navigation/stack";
 
 import { Login } from "../views/Login";
-import RecuperarPassword from "../views/recuperarPassword";
+import { RecuperarPassword } from "../views/recuperarPassword";
 // import { Settings } from "../views/Settings";
 // import { MainDrawer } from "../navigation/drawer";
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator ();
 
 export function Navigation() {
     return (
