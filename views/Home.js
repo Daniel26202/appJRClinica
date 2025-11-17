@@ -39,7 +39,7 @@ export function Home() {
                     </Card>
 
                     <Card color={"#fff"}>
-                        <Text style={styles.sub_title_card}>Pacientes nuevos: 4</Text>
+                        <Text style={styles.sub_title_card}>Pacientes atendidos: 156</Text>
                     </Card>
 
                     {/* Reportes - Especialidades más solicitadas */}
