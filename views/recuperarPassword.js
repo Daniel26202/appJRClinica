@@ -4,16 +4,21 @@ import { useState } from "react";
 import { Card } from "../components/Card";
 import { SubmitButton } from "../components/SubmitButton";
 import { Input } from "../components/Input";
-
+import { useTheme } from "../hooks/useTheme";
 // Imágenes
-const wallpaper = require("../assets/Wallpaper.png");
 const logo = require("../assets/logo.png");
+const wallpaperOscuro = require("../assets/Wallpaper-oscuro.png");
+const wallpaperClaro = require("../assets/Wallpaper.png");
+
 
 // Pantalla
 export function RecuperarPassword({ navigation }) {
+    const { DarkMode, theme } = useTheme();
     const [usuario, setUsuario] = useState("");
     const [correo, setCorreo] = useState("");
-
+    
+    let wallpaper = DarkMode ? wallpaperOscuro : wallpaperClaro;
+    
     const handleSubmit = () => {
         if (usuario === "" && correo === "") {
             alert("Recuperado");
@@ -25,13 +30,13 @@ export function RecuperarPassword({ navigation }) {
     return (
         <ImageBackground source={wallpaper} style={styles.background} resizeMode="cover">
             <Image source={logo} style={styles.logo} />
-            <Card color={"#fff"}>
-                <Text style={styles.title}>Olvidé mi contraseña</Text>
+            <Card color={DarkMode ? "#2e2e2eff" : "#fff"}>
+                <Text style={theme.titleIS}>Olvidé mi contraseña</Text>
                 <Input value={usuario} onChangeText={setUsuario} placeholder="Usuario" />
                 <Input value={correo} onChangeText={setCorreo} placeholder="Correo electrónico" />
 
                 <SubmitButton title="Verificar ahora" onPress={handleSubmit} />
-                <Text style={styles.textOlvidoC} onPress={() => navigation.navigate("Login")}>
+                <Text style={[styles.textOlvidoC, { color: DarkMode ? "#fff" : "#000" }]} onPress={() => navigation.navigate("Login")}>
                     ¿Ir a inicio?
                 </Text>
             </Card>
@@ -41,13 +46,6 @@ export function RecuperarPassword({ navigation }) {
 
 // Estilos
 const styles = StyleSheet.create({
-    title: {
-        fontWeight: "bold",
-        fontSize: 20,
-        textAlign: "center",
-        marginBottom: 8,
-        color: "#0057b5",
-    },
     background: {
         flex: 1,
         width: "100%",

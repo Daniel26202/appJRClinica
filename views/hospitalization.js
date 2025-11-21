@@ -10,8 +10,10 @@ import { HDaySummaryItem } from "../components/hospitalization/HDaySummaryItem";
 import { HPatientCard } from "../components/hospitalization/HPatientCard";
 // btn de accion rapida
 import { HQuickActionButton } from "../components/hospitalization/HQuickActionButton";
+import { useTheme } from "../hooks/useTheme";
 
 export const Hospitalization = () => {
+    const { theme } = useTheme();
     // Datos de ejemplo
     const hospitalizationData = {
         totalPatients: 24,
@@ -83,7 +85,7 @@ export const Hospitalization = () => {
     };
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={theme.container}>
             <View style={styles.content}>
                 <Text style={styles.title}>Hospitalización</Text>
 
@@ -106,7 +108,7 @@ export const Hospitalization = () => {
                 {/* Resumen del Día */}
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Resumen del Día</Text>
-                    <View style={styles.daySummary}>
+                    <View style={theme.daySummary}>
                         <HDaySummaryItem
                             icon="log-in"
                             color="#27ae60"
@@ -127,7 +129,7 @@ export const Hospitalization = () => {
                 <View style={styles.section}>
                     <View style={styles.sectionHeader}>
                         <Text style={styles.sectionTitle}>Pacientes Hospitalizados</Text>
-                        <TouchableOpacity style={styles.filterButton}>
+                        <TouchableOpacity style={theme.filterButton}>
                             <Ionicons name="filter" size={18} color="#387adf" />
                             <Text style={styles.filterText}>Filtrar</Text>
                         </TouchableOpacity>
@@ -162,7 +164,6 @@ export const Hospitalization = () => {
 };
 
 const styles = StyleSheet.create({
-    container: { height: 100, backgroundColor: "#f5f5f5" },
     content: { padding: 16 },
     title: {
         fontSize: 24,
@@ -183,29 +184,15 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginBottom: 15,
     },
-    sectionTitle: { fontSize: 18, fontWeight: "bold", color: "#387adf" },
-    filterButton: {
-        flexDirection: "row",
-        alignItems: "center",
-        backgroundColor: "#f8f9fa",
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 6,
-    },
+    sectionTitle: { fontSize: 18, fontWeight: "bold", color: "#387adf",marginBottom:12 },
+
     filterText: {
         fontSize: 12,
         color: "#387adf",
         marginLeft: 4,
         fontWeight: "500",
     },
-    // Resumen dia
-    daySummary: {
-        backgroundColor: "#fff",
-        flexDirection: "row",
-        borderRadius: 12,
-        padding: 20,
-        elevation: 2,
-    },
+    
     // divisor resumen
     summaryDivider: {
         width: 1,

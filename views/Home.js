@@ -2,10 +2,20 @@ import React from "react";
 import { StyleSheet, Text, View, ScrollView, useWindowDimensions } from "react-native";
 import { Card } from "../components/Card";
 import { SubmitButton } from "../components/SubmitButton";
+import { useTheme } from "../hooks/useTheme";
 
 // Charts
 import { PieChart, BarChart } from "react-native-chart-kit";
 
+const chartConfigDark = {
+    backgroundGradientFrom: "#1e1e1e",
+    backgroundGradientTo: "#1e1e1e",
+    decimalPlaces: 0,
+    color: (opacity = 1) => `rgba(9,199,923, ${opacity})`,
+    labelColor: (opacity = 1) => `#e2e8f0`,
+    style: { borderRadius: 12 },
+    propsForDots: { r: "4", strokeWidth: "2", stroke: "#fff" },
+};
 const chartConfig = {
     backgroundGradientFrom: "#fff",
     backgroundGradientTo: "#fff",
@@ -17,6 +27,8 @@ const chartConfig = {
 };
 
 export function Home() {
+    const { DarkMode, theme } = useTheme();
+
     const { width: windowWidth } = useWindowDimensions();
 
     const H_PADDING = 48;
@@ -27,24 +39,24 @@ export function Home() {
     const BAR_WIDTH = Math.min(availableWidth * 0.95, 560);
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={theme.container}>
             <View style={styles.content}>
                 <Card color={"#387adf"}>
                     <Text style={styles.title_card}>Pacientes Recuperados: 2</Text>
                 </Card>
 
                 <View style={styles.cardsContainer}>
-                    <Card color={"#fff"}>
-                        <Text style={styles.sub_title_card}>Citas para hoy: 5</Text>
+                    <Card color={DarkMode ? "#1e1e1e" : "#fff"}>
+                        <Text style={theme.sub_title_card}>Citas para hoy: 5</Text>
                     </Card>
 
-                    <Card color={"#fff"}>
-                        <Text style={styles.sub_title_card}>Pacientes atendidos: 156</Text>
+                    <Card color={DarkMode ? "#1e1e1e" : "#fff"}>
+                        <Text style={theme.sub_title_card}>Pacientes atendidos: 156</Text>
                     </Card>
 
                     {/* Reportes - Especialidades más solicitadas */}
-                    <Card color={"#fff"}>
-                        <Text style={styles.sub_title_card}>Especialidades más solicitadas</Text>
+                    <Card color={DarkMode ? "#1e1e1e" : "#fff"}>
+                        <Text style={theme.sub_title_card}>Especialidades más solicitadas</Text>
 
                         <View>
                             <View>
@@ -54,21 +66,21 @@ export function Home() {
                                             name: "Cardio",
                                             population: 35,
                                             color: "#387adf",
-                                            legendFontColor: "#5F5F5F",
+                                            legendFontColor: DarkMode ? "#7a7a7aff" : "#5F5F5F",
                                             legendFontSize: 12.5,
                                         },
                                         {
                                             name: "Pediatría",
                                             population: 25,
                                             color: "#f39c12",
-                                            legendFontColor: "#5F5F5F",
+                                            legendFontColor: DarkMode ? "#7a7a7aff" : "#5F5F5F",
                                             legendFontSize: 12.5,
                                         },
                                         {
                                             name: "Ortopedia",
                                             population: 20,
                                             color: "#27ae60",
-                                            legendFontColor: "#5F5F5F",
+                                            legendFontColor: DarkMode ? "#7a7a7aff" : "#5F5F5F",
                                             legendFontSize: 12.5,
                                         },
                                     ]}
@@ -89,8 +101,8 @@ export function Home() {
                     </Card>
 
                     {/* Reportes - Síntomas más comunes */}
-                    <Card color={"#fff"}>
-                        <Text style={styles.sub_title_card}>Síntomas más comunes</Text>
+                    <Card color={DarkMode ? "#1e1e1e" : "#fff"}>
+                        <Text style={theme.sub_title_card}>Síntomas más comunes</Text>
                         <View style={{ alignItems: "center" }}>
                             <ScrollView horizontal>
                                 <BarChart
@@ -100,7 +112,7 @@ export function Home() {
                                     }}
                                     width={Math.max(windowWidth, 400)}
                                     height={220}
-                                    chartConfig={chartConfig}
+                                    chartConfig={DarkMode ? chartConfigDark : chartConfig}
                                     verticalLabelRotation={30}
                                     fromZero={true}
                                     style={{ marginVertical: 8, borderRadius: 12 }}
@@ -116,10 +128,6 @@ export function Home() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: "#f5f5f5",
-        height: 100,
-    },
     content: {
         padding: 16,
     },
@@ -133,13 +141,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         textAlign: "center",
     },
-    sub_title_card: {
-        fontSize: 16,
-        fontWeight: "bold",
-        color: "#797979ff",
-        marginBottom: 16,
-        textAlign: "center",
-    },
+
     circle_reporte: {
         backgroundColor: "#f0f3f8",
         alignItems: "center",

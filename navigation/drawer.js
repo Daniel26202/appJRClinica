@@ -1,18 +1,23 @@
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
+
 import { HomeStackScreen, SettingsStackScreen, ProfileStackScreen, HospitalizationStackScreen, CitasStackScreen } from "./stacks";
+import { useTheme } from "../hooks/useTheme";
 
 const Drawer = createDrawerNavigator();
 
 export function MainDrawer() {
+    const { DarkMode } = useTheme();
     return (
+        //
+
         <Drawer.Navigator
             screenOptions={{
                 headerShown: false,
                 drawerActiveTintColor: "#387adf",
-                drawerInactiveTintColor: "#333",
-                drawerStyle: { backgroundColor: "#fff", width: 280 },
+                drawerInactiveTintColor: DarkMode ? "#fff" : "#333",
+                drawerStyle: { backgroundColor: DarkMode ? "#272727ff" : "#fff", width: 280 },
                 drawerLabelStyle: { fontSize: 16, fontWeight: "500" },
             }}
         >

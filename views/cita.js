@@ -11,9 +11,13 @@ import StatusBarCustom from "../components/cita/statusCard";
 // Helpers (funciones auxiliares)
 import { getEstadoInfo, getTipoInfo, formatFecha } from "../components/cita/utilities";
 
+import { useTheme } from "../hooks/useTheme";
+
 export const Citas = () => {
     const [selectedDate] = useState(new Date());
     const [doctorActual] = useState("Dr. Carlos Rodríguez");
+
+    const { theme } = useTheme();
 
     // Citas de ejemplo
     const citasDelDia = [
@@ -85,7 +89,7 @@ export const Citas = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={theme.containerC}>
             <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
                 <StatusBar style="dark" />
 
@@ -119,6 +123,5 @@ export const Citas = () => {
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: "#f8fafc" },
     scrollView: { height: 100 },
 });

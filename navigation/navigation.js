@@ -7,16 +7,19 @@ import { RecuperarPassword } from "../views/recuperarPassword";
 import { Settings } from "../views/Settings";
 import { MainDrawer } from "../navigation/drawer";
 
+import { useTheme } from "../hooks/useTheme";
+
 const Stack = createStackNavigator ();
 
 export function Navigation() {
+    const { DarkMode } = useTheme();
     return (
         <NavigationContainer>
             <Stack.Navigator
                 initialRouteName="Login"
                 screenOptions={{
                     headerStyle: { backgroundColor: "#387adf" },
-                    headerTintColor: "#fff",
+                    headerTintColor: DarkMode ? "#272727ff" : "#fff",
                 }}
             >
                 <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />

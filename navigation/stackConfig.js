@@ -1,7 +1,7 @@
 export function defaultStackOptions() {
     return {
         headerStyle: { backgroundColor: "#387adf" },
-        headerTintColor: "#fff",
+        headerTintColor: "#f3f3f3ff",
         headerTitleStyle: { fontWeight: "bold" },
     };
 }

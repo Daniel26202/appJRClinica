@@ -4,7 +4,7 @@ import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../hooks/useNavegation";
 
-export function MenuButton({ style, color = "#fff", size = 26 }) {
+export function MenuButton({ style, color = "#f3f3f3ff", size = 26 }) {
     const { openDrawer } = useAppNavigation();
 
     return (

@@ -4,16 +4,18 @@ import { useState } from "react";
 import { Card } from "../components/Card";
 import { Input } from "../components/Input";
 import { SubmitButton } from "../components/SubmitButton";
-
-// Imágenes
-const wallpaper = require("../assets/Wallpaper.png");
-const logo = require("../assets/logo.png");
+import { useTheme } from "../hooks/useTheme";
 
 // Pantalla Login
 export const Login = ({ navigation }) => {
+    const { DarkMode, theme } = useTheme();
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
-
+    
+    // Imágenes
+    const logo = require("../assets/logo.png");
+    let wallpaper = DarkMode ? require("../assets/Wallpaper-oscuro.png") : require("../assets/Wallpaper.png");
+    
     const handleSubmit = () => {
         if (user === "" && password === "") {
             navigation.navigate("Main");
@@ -25,12 +27,15 @@ export const Login = ({ navigation }) => {
     return (
         <ImageBackground source={wallpaper} style={styles.background} resizeMode="cover">
             <Image source={logo} style={styles.logo} />
-            <Card color={"#fff"}>
-                <Text style={styles.title}>Iniciar Sesión</Text>
+            <Card color={DarkMode ? "#2e2e2eff" : "#fff"}>
+                <Text style={theme.titleIS}>Iniciar Sesión</Text>
                 <Input value={user} onChangeText={setUser} placeholder="Usuario" />
                 <Input value={password} onChangeText={setPassword} placeholder="Contraseña" secureTextEntry={true} />
                 <SubmitButton title="Iniciar Sesión" onPress={handleSubmit} />
-                <Text style={styles.textOlvidoC} onPress={() => navigation.navigate("RecuperarPassword")}>
+                <Text
+                    style={[styles.textOlvidoC, { color: DarkMode ? "#fff" : "#000" }]}
+                    onPress={() => navigation.navigate("RecuperarPassword")}
+                >
                     ¿Olvidaste tu contraseña?
                 </Text>
             </Card>
@@ -40,13 +45,6 @@ export const Login = ({ navigation }) => {
 
 // Estilos
 const styles = StyleSheet.create({
-    title: {
-        fontWeight: "bold",
-        fontSize: 20,
-        textAlign: "center",
-        marginBottom: 8,
-        color: "#0057b5",
-    },
     background: {
         flex: 1,
         width: "100%",
