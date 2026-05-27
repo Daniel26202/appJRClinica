@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, ScrollView, StyleSheet, Text } from "react-native";
 import { StatusBar } from "expo-status-bar";
-
 // Componentes
 import Header from "../components/cita/header";
 import Stats from "../components/cita/stats";
@@ -10,14 +9,16 @@ import StatusBarCustom from "../components/cita/statusCard";
 
 // Helpers (funciones auxiliares)
 import { getEstadoInfo, getTipoInfo, formatFecha } from "../components/cita/utilities";
-
 import { useTheme } from "../hooks/useTheme";
+import { useCitas } from "../hooks/useCitas";
 
 export const Citas = () => {
     const [selectedDate] = useState(new Date());
     const [doctorActual] = useState("Dr. Carlos Rodríguez");
 
     const { theme } = useTheme();
+
+    // const {citas,cargando,guardarCita} = useCitas();
 
     // Citas de ejemplo
     const citasDelDia = [
@@ -78,6 +79,7 @@ export const Citas = () => {
         },
     ];
 
+    // console.log(citas);
     const cambiarEstadoCita = (id, nuevoEstado) => {
         console.log(`Cambiando cita ${id} a estado: ${nuevoEstado}`);
     };
