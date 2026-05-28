@@ -5,42 +5,56 @@ import { Card } from "../components/Card";
 import { Input } from "../components/Input";
 import { SubmitButton } from "../components/SubmitButton";
 import { useTheme } from "../hooks/useTheme";
+// Importamos el nuevo Hook de autenticación
+import { useAuth } from "../hooks/useAuth";
 
 // Pantalla Login
 export const Login = ({ navigation }) => {
-    const { DarkMode, theme } = useTheme();
-    const [user, setUser] = useState("");
-    const [password, setPassword] = useState("");
-    
-    // Imágenes
-    const logo = require("../assets/logo.png");
-    let wallpaper = DarkMode ? require("../assets/Wallpaper-oscuro.png") : require("../assets/Wallpaper.png");
-    
-    const handleSubmit = () => {
-        if (user === "" && password === "") {
-            navigation.navigate("Main");
-        } else {
-            alert("Fallo");
-        }
-    };
+  const { DarkMode, theme } = useTheme();
+  const [user, setUser] = useState("");
+  const [password, setPassword] = useState("");
 
-    return (
-        <ImageBackground source={wallpaper} style={styles.background} resizeMode="cover">
-            <Image source={logo} style={styles.logo} />
-            <Card color={DarkMode ? "#2e2e2eff" : "#fff"}>
-                <Text style={theme.titleIS}>Iniciar Sesión</Text>
-                <Input value={user} onChangeText={setUser} placeholder="Usuario" />
-                <Input value={password} onChangeText={setPassword} placeholder="Contraseña" secureTextEntry={true} />
-                <SubmitButton title="Iniciar Sesión" onPress={handleSubmit} />
-                <Text
-                    style={[styles.textOlvidoC, { color: DarkMode ? "#fff" : "#000" }]}
-                    onPress={() => navigation.navigate("RecuperarPassword")}
-                >
-                    ¿Olvidaste tu contraseña?
-                </Text>
-            </Card>
-        </ImageBackground>
-    );
+  // Consumimos la lógica de nuestro Hook personalizado
+  const { login, cargando } = useAuth(navigation);
+
+  // Imágenes
+  const logo = require("../assets/logo.png");
+  let wallpaper = DarkMode
+    ? require("../assets/Wallpaper-oscuro.png")
+    : require("../assets/Wallpaper.png");
+
+  const handleSubmit = () => {
+    // Llamamos directamente a la función del Hook
+    login(user, password);
+    // alert(`Usuario: ${user}\nContraseña: ${password}`);
+  };
+
+  return (
+    <ImageBackground
+      source={wallpaper}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <Image source={logo} style={styles.logo} />
+      <Card color={DarkMode ? "#2e2e2eff" : "#fff"}>
+        <Text style={theme.titleIS}>Iniciar Sesión</Text>
+        <Input value={user} onChangeText={setUser} placeholder="Usuario" />
+        <Input
+          value={password}
+          onChangeText={setPassword}
+          placeholder="Contraseña"
+          secureTextEntry={true}
+        />
+        <SubmitButton title="Iniciar Sesión" onPress={handleSubmit} />
+        <Text
+          style={[styles.textOlvidoC, { color: DarkMode ? "#fff" : "#000" }]}
+          onPress={() => navigation.navigate("RecuperarPassword")}
+        >
+          ¿Olvidaste tu contraseña?
+        </Text>
+      </Card>
+    </ImageBackground>
+  );
 };
 
 // Estilos

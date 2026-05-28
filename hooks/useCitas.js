@@ -1,6 +1,6 @@
 // hooks/useCitas.js
 import { useState, useEffect } from "react";
-import { citasService } from "../services/citasService"; // Conectamos con el servicio
+import { citasService } from "../services/citaService"; // Conectamos con el servicio
 
 export function useCitas() {
   const [citas, setCitas] = useState([]);
