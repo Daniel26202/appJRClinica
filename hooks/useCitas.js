@@ -21,19 +21,19 @@ export function useCitas() {
     }
   };
 
-  // Función para guardar una cita y refrescar la lista en pantalla
-  const guardarCita = async (nuevaCita) => {
-    try {
-      const resultado = await citasService.agendar(nuevaCita);
-      // Si tu backend PHP responde con un success: true, recargamos la lista
-      if (resultado.success) {
-        await cargarCitas();
-      }
-      return resultado;
-    } catch (err) {
-      setError("Error al guardar la cita.");
-    }
-  };
+  // // Función para guardar una cita y refrescar la lista en pantalla
+  // const guardarCita = async (nuevaCita) => {
+  //   try {
+  //     const resultado = await citasService.agendar(nuevaCita);
+  //     // Si tu backend PHP responde con un success: true, recargamos la lista
+  //     if (resultado.success) {
+  //       await cargarCitas();
+  //     }
+  //     return resultado;
+  //   } catch (err) {
+  //     setError("Error al guardar la cita.");
+  //   }
+  // };
 
   // Esto hace que las citas se carguen solas apenas entres a la vista
   useEffect(() => {
@@ -46,6 +46,6 @@ export function useCitas() {
     cargando,
     error,
     recargar: cargarCitas,
-    guardarCita,
+    // guardarCita,
   };
 }

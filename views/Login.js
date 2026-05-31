@@ -45,7 +45,11 @@ export const Login = ({ navigation }) => {
           placeholder="Contraseña"
           secureTextEntry={true}
         />
-        <SubmitButton title="Iniciar Sesión" onPress={handleSubmit} />
+        <SubmitButton
+            title={cargando ? "Iniciando..." : "Iniciar Sesión"}
+            onPress={handleSubmit}
+            disabled={cargando}
+        />
         <Text
           style={[styles.textOlvidoC, { color: DarkMode ? "#fff" : "#000" }]}
           onPress={() => navigation.navigate("RecuperarPassword")}

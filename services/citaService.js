@@ -3,7 +3,7 @@ import { api } from "./api";
 
 export const citasService = {
   obtenerTodas: async () => {
-    // ✅ Este endpoint sí está preparado para JWT
+    // este endpoint , preparado para JWT
     return await api.get("Citas/retornarTodasLasCitas");
   },
   

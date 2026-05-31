@@ -38,8 +38,12 @@ export const api = {
                 },
                 body: JSON.stringify(data),
             });
-            if (!response.ok) throw new Error(`Error del servidor: ${response.status}`);
-            return await response.json();
+
+            const json = await response.json();
+            if (!response.ok || json.ok === false) {
+                throw new Error(json.error || `Error del servidor: ${response.status}`);
+            }
+            return json;
         } catch (error) {
             console.error(`[API POST ERROR] ${endpoint}:`, error);
             throw error;

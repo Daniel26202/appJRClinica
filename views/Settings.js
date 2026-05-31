@@ -3,23 +3,28 @@ import { View, Text, StyleSheet, ScrollView, Switch, TouchableOpacity, Alert } f
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../hooks/useTheme";
 
+import { loginService } from "../services/loginService";
+
 export function Settings({ navigation }) {
-    const { DarkMode, setDarkMode, theme} = useTheme();
+    const { DarkMode, setDarkMode, theme } = useTheme();
 
     const [notifications, setNotifications] = useState(true);
     const [autoSync, setAutoSync] = useState(false);
 
     const handleLogout = () => {
+    
         Alert.alert("Cerrar Sesión", "¿Estás seguro de que deseas cerrar sesión?", [
             { text: "Cancelar", style: "cancel" },
             {
                 text: "Cerrar Sesión",
-                onPress: () => navigation.replace("Login"),
+                onPress: async () => {
+                    await loginService.cerrarSesion(); // borra el token
+                    navigation.replace("Login");
+                },
                 style: "destructive",
             },
         ]);
     };
-
     return (
         <ScrollView style={theme.container}>
             <View style={styles.content}>
@@ -145,10 +150,10 @@ const styles = StyleSheet.create({
         padding: 16,
     },
     settingInfo: {
-        flexDirection:"row",
+        flexDirection: "row",
     },
     textContainer: {
-        paddingLeft:12,
+        paddingLeft: 12,
     },
 
     section: {
