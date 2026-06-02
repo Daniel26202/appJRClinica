@@ -2,7 +2,7 @@
 // services/api.js
 import * as SecureStore from "expo-secure-store";
 // URL base de tu backend PHP.
-const BASE_URL = "http://192.168.110.100/Sistema-del--CEM--JEHOVA-RAFA/";
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
 // Función privada que obtiene el token guardado
 async function getAuthHeaders() {
