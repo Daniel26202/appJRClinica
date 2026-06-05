@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, ScrollView, StyleSheet, Text } from "react-native";
+import { View, ScrollView, StyleSheet, ActivityIndicator, Text } from "react-native";
 import { StatusBar } from "expo-status-bar";
 // Componentes
 import Header from "../components/cita/header";
@@ -8,122 +8,96 @@ import CitaCard from "../components/cita/citaCard";
 import StatusBarCustom from "../components/cita/statusCard";
 
 // Helpers (funciones auxiliares)
-import { getEstadoInfo, getTipoInfo, formatFecha } from "../components/cita/utilities";
+import { getTipoInfo, formatFecha } from "../components/cita/utilities";
 import { useTheme } from "../hooks/useTheme";
 import { useCitas } from "../hooks/useCitas";
 
 export const Citas = () => {
-    const [selectedDate] = useState(new Date());
-    const [doctorActual] = useState("Dr. Carlos Rodríguez");
-
     const { theme } = useTheme();
 
-    // const {citas,cargando,guardarCita} = useCitas();
+    const { citas, cargando, error } = useCitas();
+    const [doctorActual, setDoctorActual] = useState(null);
 
-    // Citas de ejemplo
-    const citasDelDia = [
-        {
-            id: "1",
-            paciente: "María González",
-            cedula: "30554032",
-            edad: "45 años",
-            telefono: "+34 612 345 678",
-            hora: "13:00",
-            estado: "pendiente",
-            duracion: "30 min",
-            enConsulta: 0,
-        },
-        {
-            id: "2",
-            paciente: "Juan Pérez",
-            cedula: "32254032",
-            edad: "62 años",
-            telefono: "+34 623 456 789",
-            hora: "09:30",
-            estado: "pendiente",
-            duracion: "20 min",
-            enConsulta: 0,
-        },
-        {
-            id: "3",
-            paciente: "Laura Sánchez",
-            cedula: "25254032",
-            edad: "28 años",
-            telefono: "+34 634 567 890",
-            hora: "10:15",
-            estado: "Realizada",
-            duracion: "25 min",
-            enConsulta: 1,
-        },
-        {
-            id: "4",
-            paciente: "Roberto Jiménez",
-            cedula: "20254032",
-            edad: "35 años",
-            telefono: "+34 645 678 901",
-            hora: "11:00",
-            estado: "pendiente",
-            duracion: "40 min",
-            enConsulta: 0,
-        },
-        {
-            id: "5",
-            paciente: "Ana López",
-            cedula: "20253232",
-            edad: "50 años",
-            telefono: "+34 656 789 012",
-            hora: "11:45",
-            estado: "Realizada",
-            duracion: "30 min",
-            enConsulta: 0,
-        },
-    ];
+    // --- Estados de carga y error ---
+    if (cargando)
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <ActivityIndicator size="large" color="#387adf" />
+                <Text style={{ marginTop: 12, color: "#64748b" }}>Cargando citas...</Text>
+            </View>
+        );
+    if (error)
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <Text style={{ color: "#e74c3c", padding: 20, textAlign: "center" }}>{error}</Text>
+            </View>
+        );
 
-    // console.log(citas);
-    const cambiarEstadoCita = (id, nuevoEstado) => {
-        console.log(`Cambiando cita ${id} a estado: ${nuevoEstado}`);
-    };
+    // Extraemos doctores únicos de las citas que llegaron del backend
+    const listaDoctores = [...new Map(citas.map((c) => [c.doctor, { nombre: c.doctor }])).values()];
+
+    // Si no eligió ninguno aún, mostramos el primero automáticamente
+    const doctorSeleccionado = doctorActual ?? listaDoctores[0]?.nombre ?? "";
+
+    // Especialidad del doctor seleccionado para mostrar en el header
+    // find devuelve únicamente el primer elemento que cumpla tu condición, deteniéndose de inmediato al encontrarlo
+    const especialidad = citas.find((c) => c.doctor === doctorSeleccionado)?.especialidad ?? "";
+    // filtradas por el doctor activo
+    const citasDelDoctor = citas.filter((c) => c.doctor === doctorSeleccionado);
 
     const stats = {
-        total: citasDelDia.length,
-        pendientes: citasDelDia.filter((c) => c.estado === "pendiente").length,
-        completadas: citasDelDia.filter((c) => c.estado === "Realizada").length,
+        total: citas.length,
+        pendientes: citas.filter((c) => c.estado === "Pendiente").length,
+        completadas: citas.filter((c) => c.estado === "Realizadas").length,
     };
 
+    // Tu lista de doctores disponibles
     return (
         <View style={theme.containerC}>
             <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
                 <StatusBar style="dark" />
 
                 {/* Header */}
-                <Header doctor={doctorActual} specialty="Cardiólogo" date={formatFecha(selectedDate)} />
+                <Header
+                    doctor={doctorSeleccionado}
+                    specialty={especialidad}
+                    date={formatFecha(new Date())}
+                    listaDoctores={listaDoctores}
+                    onSelectDoctor={(nombre) => setDoctorActual(nombre)}
+                />
+
                 {/* Estadísticas */}
                 <Stats stats={stats} />
 
-                {/* Lista de Citas */}
-                {
-                    // Orden por hora
-                    citasDelDia
-                        .sort((a, b) => a.hora.localeCompare(b.hora))
-                        .map((cita, index) => (
-                            <CitaCard
-                                key={cita.id}
-                                cita={cita}
-                                index={index}
-                                estadoInfo={getEstadoInfo(cita.estado)}
-                                tipoInfo={getTipoInfo(cita.tipo)}
-                                cambiarEstadoCita={cambiarEstadoCita}
-                            />
-                        ))
-                }
+                 {/* Lista de citas del doctor seleccionado */}
+                {citasDelDoctor.length === 0 ? (
+                    <Text style={styles.sinCitas}>Sin citas para hoy</Text>
+                ) : (
+                    citasDelDoctor.map((cita, index) => (
+                        <CitaCard
+                            key={cita.id_cita}
+                            cita={cita}
+                            index={index}
+                            tipoInfo={getTipoInfo(cita.categoria)}
+                            cambiarEstadoCita={() => {}}
+                        />
+                    ))
+                )}
             </ScrollView>
 
             {/* Barra de estado inferior */}
-            <StatusBarCustom citasDelDia={citasDelDia} />
+            <StatusBarCustom citasDelDia={citas} />
         </View>
     );
 };
 
+
 const styles = StyleSheet.create({
-    scrollView: { height: 100 },
+    scrollView: { flex: 1 },
+    sinCitas: {
+        textAlign: "center",
+        color: "#64748b",
+        fontSize: 16,
+        marginTop: 40,
+    },
 });

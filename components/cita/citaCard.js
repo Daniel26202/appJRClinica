@@ -9,7 +9,7 @@ const CitaCard = ({ cita, index }) => {
         <View style={theme.citaCard}>
             {/* Acciones */}
             <View style={styles.actionsSection}>
-                {cita.estado === "pendiente" ? (
+                {cita.estado === "Pendiente" ? (
                     <View style={[styles.posicion, theme.primary]}>
                         <View style={styles.citaHeader}>
                             <View>
@@ -21,7 +21,7 @@ const CitaCard = ({ cita, index }) => {
                             <View></View>
                         </View>
                     </View>
-                ) : cita.estado === "Realizada" ? (
+                ) : cita.estado === "Realizadas" ? (
                     <View style={[styles.posicion, theme.success]}>
                         <View style={styles.citaHeader}>
                             <View>

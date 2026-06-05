@@ -10,9 +10,9 @@ const StatusBarCustom = ({ citasDelDia }) => {
                 <Text style={styles.statusText}>
                     {
                         // El ?. evita errores si pacienteEnConsulta es undefined
-                        pacienteEnConsulta.enConsulta > 0
-                            ? `Atendiendo a ${pacienteEnConsulta?.paciente}`
-                            : "Listo para recibir pacientes"
+                        pacienteEnConsulta
+                        ? `Atendiendo a ${pacienteEnConsulta.paciente}`
+                        : "Listo para recibir pacientes"
                     }
                 </Text>
             </View>

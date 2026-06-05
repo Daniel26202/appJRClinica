@@ -31,7 +31,7 @@ export function Settings({ navigation }) {
                 <Text style={styles.title}>Configuración</Text>
 
                 {/* Notificaciones */}
-                <View style={styles.section}>
+                {/* <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Notificaciones</Text>
 
                     <View style={theme.settingItem}>
@@ -65,10 +65,10 @@ export function Settings({ navigation }) {
                             thumbColor={autoSync ? "#fff" : "#f4f3f4"}
                         />
                     </View>
-                </View>
+                </View> */}
 
                 {/* Seguridad */}
-                <View style={theme.section}>
+                {/* <View style={theme.section}>
                     <Text style={styles.sectionTitle}>Seguridad</Text>
 
                     <TouchableOpacity style={theme.settingItem}>
@@ -81,7 +81,7 @@ export function Settings({ navigation }) {
                         </View>
                         <Ionicons name="chevron-forward" size={20} color="#797979" />
                     </TouchableOpacity>
-                </View>
+                </View> */}
 
                 {/* Apariencia */}
                 <View style={theme.section}>

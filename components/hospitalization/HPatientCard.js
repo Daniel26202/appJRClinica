@@ -6,7 +6,7 @@ import { useTheme } from "../../hooks/useTheme";
 
 const consultaP = (historiaClinica, diagnostico) => {
     Alert.alert("Datos de Hospitalización", `Historia Clínica: ${historiaClinica}\n\nDiagnóstico: ${diagnostico}\n`, [
-        { text: "Cancelar", style: "cancel" },
+        { text: "Cerrar", style: "cancel" },
     ]);
 };
 
@@ -15,10 +15,13 @@ export const HPatientCard = ({ patient, getStatusColor, getStatusIcon }) => {
 
     return (
         <View style={theme.card}>
+            {/* Encabezado: nombre + estado */}
             <View style={styles.header}>
-                <View>
-                    <Text style={theme.name}>{patient.name}</Text>
-                    <Text style={theme.age}>{patient.age} años</Text>
+                <View style={{ flex: 1 }}>
+                    <Text style={theme.name}>{patient.paciente}</Text>
+                    <Text style={theme.age}>
+                        {patient.edad} años • {patient.cedula}
+                    </Text>
                 </View>
                 <View style={[styles.status, { backgroundColor: getStatusColor(patient.status) }]}>
                     <Ionicons name={getStatusIcon(patient.status)} size={14} color="#fff" />
@@ -26,44 +29,62 @@ export const HPatientCard = ({ patient, getStatusColor, getStatusIcon }) => {
                 </View>
             </View>
 
-            <View style={styles.details}>
+            {/* Fecha de ingreso */}
+            <View style={styles.row}>
                 <Ionicons name="calendar" size={16} color="#797979" />
-                <Text style={theme.detail}>Ingreso: {patient.admissionDate}</Text>
+                <Text style={theme.detail}>Ingreso: {patient.ingreso?.replace("T", " ").slice(0, 16) ?? "—"}</Text>
             </View>
 
-            <Text style={theme.diagnosis}>Diagnóstico: {patient.diagnosis}</Text>
+            {/* Diagnóstico */}
+            <Text style={theme.diagnosis}>Diagnóstico: {patient.diagnostico}</Text>
 
-            <View style={styles.details}>
+            {/* Doctor */}
+            <View style={styles.row}>
                 <Ionicons name="medical" size={16} color="#387adf" />
                 <Text style={theme.detail}>Médico: {patient.doctor}</Text>
             </View>
 
-            <TouchableOpacity style={styles.action} onPress={() => consultaP(patient.historial, patient.diagnosis)}>
+            {/* Botón expediente */}
+            <TouchableOpacity style={styles.action} onPress={() => consultaP(patient.historial, patient.diagnostico)}>
                 <Ionicons name="document-text" size={16} color="#387adf" />
-                <Text style={styles.actionText}>Expediente</Text>
+                <Text style={styles.actionText}>Ver Expediente</Text>
             </TouchableOpacity>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-   
     header: {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
+        marginBottom: 8,
     },
-
     status: {
         flexDirection: "row",
         alignItems: "center",
         padding: 4,
         borderRadius: 6,
     },
-    statusText: { color: "#fff", marginLeft: 4, fontSize: 10 },
-    details: { flexDirection: "row", alignItems: "center", marginTop: 6 },
-    
-
-    action: { flexDirection: "row", alignItems: "center", marginTop: 10 },
-    actionText: { marginLeft: 6, color: "#387adf", fontWeight: "bold" },
+    statusText: {
+        color: "#fff",
+        marginLeft: 4,
+        fontSize: 10,
+        fontWeight: "bold",
+    },
+    row: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginTop: 6,
+    },
+    action: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginTop: 10,
+    },
+    actionText: {
+        marginLeft: 6,
+        color: "#387adf",
+        fontWeight: "bold",
+    },
 });

@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, ScrollView, useWindowDimensions } from "react-n
 import { Card } from "../components/Card";
 import { SubmitButton } from "../components/SubmitButton";
 import { useTheme } from "../hooks/useTheme";
+import { useCitas } from "../hooks/useCitas";
 
 // Charts
 import { PieChart, BarChart } from "react-native-chart-kit";
@@ -27,6 +28,8 @@ const chartConfig = {
 };
 
 export function Home() {
+    const { citas, cargando, error } = useCitas();
+
     const { DarkMode, theme } = useTheme();
 
     const { width: windowWidth } = useWindowDimensions();
@@ -47,7 +50,7 @@ export function Home() {
 
                 <View style={styles.cardsContainer}>
                     <Card color={DarkMode ? "#1e1e1e" : "#fff"}>
-                        <Text style={theme.sub_title_card}>Citas para hoy: 5</Text>
+                        <Text style={theme.sub_title_card}>Citas para hoy: {error ? "Error" : (cargando ? "Cargando..." : citas.length)}</Text>
                     </Card>
 
                     <Card color={DarkMode ? "#1e1e1e" : "#fff"}>

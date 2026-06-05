@@ -221,6 +221,38 @@ export const ThemeCont = ({ children }) => {
                 shadowRadius: 4,
                 elevation: 2,
             },
+
+            // header de citas
+            optionText: {
+                fontSize: 16,
+                color: DarkMode ? "#727272" : "#475569",
+                fontWeight: "500",
+            },
+            optionButton: {
+                borderWidth: 1,
+                borderColor: DarkMode ? "#6e6e6e" : "#6e6e6e00",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                paddingVertical: 14,
+                paddingHorizontal: 16,
+                borderRadius: 12,
+                backgroundColor: "#F8FAFC",
+                marginBottom: 8,
+            },
+            optionButtonSelected: {
+                borderWidth: 1,
+                borderColor: DarkMode ? "#3e89fa" : "#387adf",
+            },
+            optionTextSelected: {
+                color: DarkMode ? "#3e89fa" : "#387adf",
+                fontWeight: "700",
+            },
+            checkIcon: {
+                fontSize: 16,
+                color: DarkMode ? "#3e89fa" : "#387adf",
+                fontWeight: "bold",
+            },
         });
     }, [DarkMode]);
 

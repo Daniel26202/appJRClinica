@@ -1,4 +1,3 @@
-
 // services/api.js
 import * as SecureStore from "expo-secure-store";
 // URL base de tu backend PHP.
@@ -15,16 +14,29 @@ export const api = {
     async get(endpoint) {
         try {
             const authHeaders = await getAuthHeaders();
+            // console.log("Cabeceras enviadas al backend:", authHeaders);
             const response = await fetch(`${BASE_URL}${endpoint}`, {
                 headers: { ...authHeaders },
             });
+
             if (!response.ok) throw new Error(`Error del servidor: ${response.status}`);
-            return await response.json();
+
+            const textResponse = await response.text();
+
+            try {
+                return JSON.parse(textResponse);
+            } catch (jsonError) {
+                // console.log("------- ¡ERROR DE PHP DETECTADO! -------");
+                // console.log(textResponse);
+                // console.log("----------------------------------------");
+                throw new Error("El servidor no devolvió un JSON válido.");
+            }
         } catch (error) {
             console.error(`[API GET ERROR] ${endpoint}:`, error);
             throw error;
         }
     },
+    
     // Petición POST genérica
 
     async post(endpoint, data) {
