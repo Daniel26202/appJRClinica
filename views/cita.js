@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, ScrollView, StyleSheet, ActivityIndicator, Text } from "react-native";
+import { View, ScrollView, StyleSheet, ActivityIndicator, Text, RefreshControl } from "react-native";
 import { StatusBar } from "expo-status-bar";
 // Componentes
 import Header from "../components/cita/header";
@@ -15,10 +15,10 @@ import { useCitas } from "../hooks/useCitas";
 export const Citas = () => {
     const { theme } = useTheme();
 
-    const { citas, cargando, error } = useCitas();
+    const { citas, cargando, refrescando, error, onPullToRefresh } = useCitas();
     const [doctorActual, setDoctorActual] = useState(null);
 
-    // --- Estados de carga y error ---
+    // --- Estado de carga inicial (solo la primera vez) ---
     if (cargando)
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -26,7 +26,9 @@ export const Citas = () => {
                 <Text style={{ marginTop: 12, color: "#64748b" }}>Cargando citas...</Text>
             </View>
         );
-    if (error)
+
+    // --- Estado de error solo bloquea la pantalla si nunca hubo datos cargados ---
+    if (error && citas.length === 0)
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                 <Text style={{ color: "#e74c3c", padding: 20, textAlign: "center" }}>{error}</Text>
@@ -40,7 +42,6 @@ export const Citas = () => {
     const doctorSeleccionado = doctorActual ?? listaDoctores[0]?.nombre ?? "";
 
     // Especialidad del doctor seleccionado para mostrar en el header
-    // find devuelve únicamente el primer elemento que cumpla tu condición, deteniéndose de inmediato al encontrarlo
     const especialidad = citas.find((c) => c.doctor === doctorSeleccionado)?.especialidad ?? "";
     // filtradas por el doctor activo
     const citasDelDoctor = citas.filter((c) => c.doctor === doctorSeleccionado);
@@ -51,10 +52,15 @@ export const Citas = () => {
         completadas: citas.filter((c) => c.estado === "Realizadas").length,
     };
 
-    // Tu lista de doctores disponibles
     return (
         <View style={theme.containerC}>
-            <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+            <ScrollView
+                style={styles.scrollView}
+                showsVerticalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl refreshing={refrescando} onRefresh={onPullToRefresh} colors={["#387adf"]} tintColor="#387adf" />
+                }
+            >
                 <StatusBar style="dark" />
 
                 {/* Header */}
@@ -69,7 +75,7 @@ export const Citas = () => {
                 {/* Estadísticas */}
                 <Stats stats={stats} />
 
-                 {/* Lista de citas del doctor seleccionado */}
+                {/* Lista de citas del doctor seleccionado */}
                 {citasDelDoctor.length === 0 ? (
                     <Text style={styles.sinCitas}>Sin citas para hoy</Text>
                 ) : (
@@ -90,7 +96,6 @@ export const Citas = () => {
         </View>
     );
 };
-
 
 const styles = StyleSheet.create({
     scrollView: { flex: 1 },

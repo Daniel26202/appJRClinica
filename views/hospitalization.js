@@ -1,22 +1,18 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, RefreshControl } from "react-native";
 // targeta estadistica
 import { HStatCard } from "../components/hospitalization/HStatCard";
 // resumen del dia
 import { HDaySummaryItem } from "../components/hospitalization/HDaySummaryItem";
 // card de paciente
 import { HPatientCard } from "../components/hospitalization/HPatientCard";
-// btn de accion rapida
-import { HQuickActionButton } from "../components/hospitalization/HQuickActionButton";
 import { useTheme } from "../hooks/useTheme";
 import { useHospitalizacion } from "../hooks/useHospitalizacion";
 
 export const Hospitalization = () => {
     const { theme } = useTheme();
 
-    const { pacientes, stats, cargando, error, recargar } = useHospitalizacion();
+    const { pacientes, stats, cargando, refrescando, error, onPullToRefresh } = useHospitalizacion();
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -44,6 +40,7 @@ export const Hospitalization = () => {
         }
     };
 
+    // Solo bloquea pantalla completa en la carga inicial
     if (cargando)
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -52,7 +49,9 @@ export const Hospitalization = () => {
             </View>
         );
 
-    if (error)
+    // Solo bloquea pantalla completa si nunca hubo datos (si ya había datos, el error
+    // de un refresh fallido no debe tapar lo que el usuario ya estaba viendo)
+    if (error && pacientes.length === 0)
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                 <Text style={{ color: "#e74c3c", padding: 20, textAlign: "center" }}>{error}</Text>
@@ -60,7 +59,12 @@ export const Hospitalization = () => {
         );
 
     return (
-        <ScrollView style={theme.container}>
+        <ScrollView
+            style={theme.container}
+            refreshControl={
+                <RefreshControl refreshing={refrescando} onRefresh={onPullToRefresh} colors={["#387adf"]} tintColor="#387adf" />
+            }
+        >
             <View style={styles.content}>
                 <Text style={styles.title}>Hospitalización</Text>
 

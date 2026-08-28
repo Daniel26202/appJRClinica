@@ -1,5 +1,5 @@
 .env
-
+private
 
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
@@ -22,7 +22,7 @@ expo-env.d.ts
 *.mobileprovision
 
 # Metro
-.metro-health-check*
+.metro-health-check
 
 # debug
 npm-debug.*

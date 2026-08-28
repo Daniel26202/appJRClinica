@@ -1,5 +1,6 @@
 // services/api.js
 import * as SecureStore from "expo-secure-store";
+import { descifrarRespuesta } from "./descriptar"; // ajusta el nombre si tu archivo se llama distinto
 // URL base de tu backend PHP.
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -10,34 +11,27 @@ async function getAuthHeaders() {
 }
 
 export const api = {
-    // Petición GET genérica
+    // GET genérica
     async get(endpoint) {
         try {
             const authHeaders = await getAuthHeaders();
-            // console.log("Cabeceras enviadas al backend:", authHeaders);
             const response = await fetch(`${BASE_URL}${endpoint}`, {
                 headers: { ...authHeaders },
             });
 
             if (!response.ok) throw new Error(`Error del servidor: ${response.status}`);
 
-            const textResponse = await response.text();
+            const cargaCifrada = await response.json();
+            const json = await descifrarRespuesta(cargaCifrada);
 
-            try {
-                return JSON.parse(textResponse);
-            } catch (jsonError) {
-                // console.log("------- ¡ERROR DE PHP DETECTADO! -------");
-                // console.log(textResponse);
-                // console.log("----------------------------------------");
-                throw new Error("El servidor no devolvió un JSON válido.");
-            }
+            return json;
         } catch (error) {
             console.error(`[API GET ERROR] ${endpoint}:`, error);
             throw error;
         }
     },
-    
-    // Petición POST genérica
+
+    // POST genérica
 
     async post(endpoint, data) {
         try {
@@ -50,8 +44,10 @@ export const api = {
                 },
                 body: JSON.stringify(data),
             });
+            const cargaCifrada = await response.json();
+            console.log("RESPUESTA CRUDA DEL BACKEND:", JSON.stringify(cargaCifrada));
 
-            const json = await response.json();
+            const json = await descifrarRespuesta(cargaCifrada);
             if (!response.ok || json.ok === false) {
                 throw new Error(json.error || `Error del servidor: ${response.status}`);
             }
