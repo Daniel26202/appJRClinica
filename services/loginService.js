@@ -3,15 +3,14 @@ import { api } from "./api";
 import * as SecureStore from "expo-secure-store";
 
 export const loginService = {
-  /**
-   * Envía las credenciales al backend y guarda el JWT si es válido
+  /**Envía las credenciales al backend y guarda el JWT si es válido
    * @param {string} username
    * @param {string} password
    */
   async autenticar(username, password) {
     try {
       // Usamos el método POST de tu api.js apuntando al método de tu controlador
-      const data = await api.post("IniciarSesion/iniciarSesionMovil", {
+      const data = await api.post("IniciarSesion/iniciarSesionMovilApk", {
         username: username,
         password: password,
       });
@@ -31,9 +30,7 @@ export const loginService = {
     }
   },
 
-  /**
-   * Elimina el token del dispositivo para cerrar la sesión
-   */
+    // Elimina el token del dispositivo para cerrar la sesión
   async cerrarSesion() {
     await SecureStore.deleteItemAsync("token_jwt_cem");
   },

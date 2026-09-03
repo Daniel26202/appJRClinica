@@ -1,6 +1,7 @@
 .env
-private
-
+keys
+encrypt_private.key
+public.key
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
 # dependencies

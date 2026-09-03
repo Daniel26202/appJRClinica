@@ -1,6 +1,6 @@
 // services/api.js
 import * as SecureStore from "expo-secure-store";
-import { descifrarRespuesta } from "./descriptar"; // ajusta el nombre si tu archivo se llama distinto
+import { descifrarRespuesta, cifrarPeticion } from "./cifrado"; // ajusta el nombre si tu archivo se llama distinto
 // URL base de tu backend PHP.
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -19,11 +19,12 @@ export const api = {
                 headers: { ...authHeaders },
             });
 
-            if (!response.ok) throw new Error(`Error del servidor: ${response.status}`);
-
             const cargaCifrada = await response.json();
             const json = await descifrarRespuesta(cargaCifrada);
-
+            
+            if (!response.ok || json.ok === false) {
+                throw new Error(json.error || `Error del servidor: ${response.status}`);
+            }
             return json;
         } catch (error) {
             console.error(`[API GET ERROR] ${endpoint}:`, error);
@@ -36,16 +37,17 @@ export const api = {
     async post(endpoint, data) {
         try {
             const authHeaders = await getAuthHeaders();
+            const dataCifrada = await cifrarPeticion(data);
             const response = await fetch(`${BASE_URL}${endpoint}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     ...authHeaders,
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify(dataCifrada),
             });
             const cargaCifrada = await response.json();
-            console.log("RESPUESTA CRUDA DEL BACKEND:", JSON.stringify(cargaCifrada));
+            // console.log("RESPUESTA CRUDA DEL BACKEND:", JSON.stringify(cargaCifrada));
 
             const json = await descifrarRespuesta(cargaCifrada);
             if (!response.ok || json.ok === false) {
